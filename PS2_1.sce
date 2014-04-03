@@ -1,0 +1,68 @@
+//Gaussian function
+function y = p1(x)
+    y = 1/sqrt(6*%pi)*%e^(-x^2/6)
+endfunction
+
+//t-distribution function
+function y = p2(x)
+    y = 1/(0.886226925453*sqrt(3*%pi))*(1+x^2/3)^(-2)
+endfunction
+
+//definite integral of Gaussian function for z >= 0
+//Simpson's 1/3 rule with 5 panels, 6 points
+function y = P1(x)
+    y = x/6*p1(0) + 2*x/3*p1(x/5) + x/3*p1(2*x/5) + 2*x/3*p1(3*x/5) + x/3*p1(4*x/5) + x/6*p1(x)
+endfunction
+
+//definite integral of t-distribution function for z >= 0
+//Simpson's 1/3 rule with 5 panels, 6 points
+function y = P2(x)
+    y = x/6*p2(0) + 2*x/3*p2(x/5) + x/3*p2(2*x/5) + 2*x/3*p2(3*x/5) + x/3*p2(4*x/5) + x/6*p2(x)
+endfunction
+
+//root-finding function for Gaussian function
+function y = Q1(z, a)
+    y = 0.5 + P1(z) - a
+endfunction
+
+//root-finding function for t-distribution function
+function y = Q2(z, a)
+    y = 0.5 + P2(z) - a
+endfunction
+
+//regula-falsi method for Gaussian function
+//value at risk at alpha
+function m = RF1(alpha)
+    a = 0
+    b = 1
+    if(Q1(a, alpha)*Q1(b, alpha) > 0) then
+        disp('error')
+        return
+    else
+        while 1
+            m = (a * Q1(b, alpha) - b * Q1(a, alpha)) / (Q1(b, alpha) - Q1(a, alpha))
+            disp(m)
+            if (Q1(m, alpha) < 0.0000001) then
+                return
+            else
+                if(Q1(a, alpha) * Q1(m, alpha) > 0) then
+                    a = m
+                else
+                    b = m
+                end
+            end
+        end
+    end
+endfunction
+
+function myGaussianDriver()
+    x = []
+    y = []
+    for val=0.8:0.01:0.99
+        x = [x val]
+        y = [y RF1(val)]
+    end
+    plot(x, y)
+endfunction
+
+myGaussianDriver()

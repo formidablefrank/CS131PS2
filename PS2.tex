@@ -1,0 +1,136 @@
+\documentclass[10pt, twocolumn]{article}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[margin=.75in]{geometry}
+\newcommand{\highlight}[1]{\colorbox{gray}{$\displaystyle#1$}}
+\newcommand{\head}[1]{\textnormal{\textbf{#1}}}
+\setlength{\columnsep}{.5in}
+
+\begin{document}
+	\title{\textbf{CS 131 Problem Set 2}}
+	\author {Catherine Angangco, Joshua Frankie Rayo}
+	\maketitle
+	
+	\section{Value-at-Risk}
+		\subsection{Preliminaries}
+		The value at risk \textit{VaR} of a continuous loss distribution modeled by a probability distribution function, say $p(x)$ at a given risk level $(1-\alpha)\in[0,1]$ is defined as the value at which the cumulative probability of $p(x)$ from $-\infty$ is equal to $\alpha$.
+		Mathematically speaking, we say:
+		$$VaR_{\alpha} = z \Leftrightarrow \int^{z}_{-\infty}p(x)dx=\alpha
+		$$
+		A value $z$ is the value-at-risk at $a$ if and only if the area under the curve of $p(x)$ in the interval $(-\infty,z]$ is equal to $\alpha$.
+		We first observe the properties of the probability functions 
+		$$p_1(x)=\frac{1}{\sqrt{6\pi}}e^{-\frac{x^2}{6}}$$ 
+		\begin{center}
+			and
+		\end{center}
+		 $$ p_2(x)=\frac{1}{\gamma\sqrt{3\pi}}\left(1+\frac{x^2}{3}\right)^{-2}, \gamma\approx0.886226925453$$
+		where $p_1(x)$ is a Gaussian distribution function and $p_2(x)$ is a t distribution function.
+		\begin{itemize}
+			\item We know that these functions are symmetric to some line $x=\mu$, where $\mu$ is the mean of the distribution.
+				When $\mu=0$, its graph is symmetric to the line $x=0$ or y-axis. It has the property
+				$$
+					\int^{n}_{m}p(x)dx=\int^{-m}_{-n}p(x)dx
+				$$
+				for $m\leq n$.
+			\item The functions above are probability distribution functions. It follows that the sum of the probabilities in the sample space is equal to 1. Or equivalently,
+				\begin{equation}
+					\sum_{\forall x}p(x)=\int_{-\infty}^{\infty}p(x)dx=1
+				\end{equation}
+			\item We redefine the limits of integration (i.e.) split equation (2) into two as follows:
+				\begin{equation}
+					\int_{-\infty}^{\infty}p(x)dx=\int_{-\infty}^{0}p(x)dx + \int_{0}^{\infty}p(x)dx
+				\end{equation}
+			\item Since the graph of the function is symmetric to y-axis, the area under the curve in the interval $[0,\infty)$ is also equal to the area uder the curve in the interval $(-\infty,0)$. Using equation (1) and (2),
+				\begin{equation}
+					\int_{-\infty}^{0}p(x)dx = \int_{0}^{\infty}p(x)dx = 0.5
+				\end{equation}
+		\end{itemize}
+		Now, we verify if $\int_{0}^{\infty}p(x)dx = 0.5$ using Gauss-Laguerre quadrature.
+		For $p_1(x)$, the Gauss-Laguerre quadrature form of the integral is
+		$$I_1 = \int_{0}^{\infty}e^{-x}\left(\frac{e^{x}}{\sqrt{6\pi}}e^{-\frac{x^2}{6}}\right)dx=
+			\int_{0}^{\infty}e^{-x}\left(\frac{1}{\sqrt{6\pi}}e^{x-\frac{x^2}{6}}\right)dx
+		$$
+		where the weighting function $w(x)=e^{-x}$ and $g_1(x)=\frac{1}{\sqrt{6\pi}}e^{x-\frac{x^2}{6}}$. By Gaussian quadratures approximation,
+		$$I_1 \approx \sum_{i=1}^{n}A_ig_1(x_i)
+		$$
+		where $i$ is the number of nodes for approximation. We use $n=6$ nodes. The nodal abscissas and corresponding weights for $n=6$ is given below.
+		\begin{center}
+		\begin{tabular}{ccc}
+			\hline
+			\head{$i$} & \head{$x_i$} & \head{$A_i$}\\
+			\hline
+			1 & 0.222 847 & 0.458 964 \\
+			2 & 1.188 932 & 0.417 000 \\
+			3 & 2.992 736 & 0.113 373 \\
+			4 & 5.775 144 & 0.010 399 2 \\
+			5 & 9.837 467 & 0.000 261 017 \\
+			6 & 15.982 874 & 0.000 000 898 548 \\
+			\hline
+		\end{tabular}
+		\end{center}
+		To solve the integral,
+		$$\begin{aligned}
+			I_1 &= A_1g_1(x_1) + A_2g_1(x_2) + A_3g_1(x_3)\\
+				&+ A_4g_1(x_4) + A_5g_1(x_5) + A_6g_1(x_6)\\
+			I_1 &= 0.458964\cdot0.285454 + 0.417000\cdot0.597557\\
+				&+ 0.113373\cdot1.03226 + 0.0103992\cdot0.285985\\
+				&+ 0.000261017\cdot0.000426427\\
+				&+ 8.98548\times10^{-7}\cdot6.50687\times10^{-13}\\
+			I_1 &= 0.500198 \approx 0.5
+		\end{aligned}$$
+		
+		For $p_2(x)$, the Gauss-Laguerre quadrature form of the integral is
+		$$I_2=\int_{0}^{\infty}e^{-x}\left(\frac{e^x}{\gamma\sqrt{3\pi}}\left(1+\frac{x^2}{3}\right)^{-2}\right), \gamma\approx0.886226925453$$
+		where the weighting function $w(x)=e^{-x}$ and $g_2(x)=\frac{e^x}{\gamma\sqrt{3\pi}}\left(1+\frac{x^2}{3}\right)^{-2}$. By Gaussian quadratures approximation,
+		$$I_2 \approx \sum_{i=1}^{n}A_ig_2(x_i)$$
+		We used again $n=6$ nodes, and the nodal abscissas and weights above.
+		
+		To solve the integral,
+		$$\begin{aligned}
+			I_2 &= A_1g_2(x_1) + A_2g_2(x_2) + A_3g_2(x_3)\\
+				&+ A_4g_2(x_4) + A_5g_2(x_5) + A_6g_2(x_6)\\
+			I_2 &= 0.458964\cdot0.444468 + 0.417000\cdot0.55761\\
+				&+ 0.113373\cdot0.461408 + 0.0103992\cdot0.806524\\
+				&+ 0.000261017\cdot6.22113\\
+				&+ 8.98548\times10^{-7}432.589\\
+			I_2 &= 0.499229 \approx 0.5
+		\end{aligned}$$
+		And now we established equation (3).
+		
+		Going back to our original problem, take note that we are only estimating the value-at-risks for $\alpha\geq0.5$, so we know that $z\geq0$.
+		Therefore we should use the relationship that
+		$$\begin{aligned}
+			\int_{-\infty}^{z}p(x)dx &= \int_{-\infty}^{0}p(x)dx + \int_{0}^{z}p(x)dx\\
+				&= 0.5 + \int_{0}^{z}p(x)dx
+		\end{aligned}$$
+		
+		So it only remains to compute for $\int_{0}^{z}p(x)dx$.
+		We use composite Simpson's 1/3 rule with 6 points also.
+		
+		The general integral $\int_{a}^{b}f(x)dx$ can be numerically solved using the composite Simpson's 1/3 rule:
+		\begin{equation}
+		\begin{aligned}
+			\int_{a}^{b}f(x)dx &= \frac{b-a}{6}f(a) + \frac{2(b-a)}{3}\sum_{i\:even}f(x_i)\\
+			&+ \frac{b-a}{3}\sum_{i\:odd}f(x_i) + \frac{b-a}{6}f(b)
+		\end{aligned}
+		\end{equation}
+		The next step is to model our integral $\int_{0}^{z}p(x)dx$ as a function, say $P(z)$ so that we can use root-finding method for the equation $0.5 + P(z)-\alpha=0$.
+		
+		\subsection{VaR estimates using Gaussian distribution}
+		We first divide the interval $[0, z]$ into five panels with 6 points: $\{0, z/5, 2z/5, 3z/5, 4z/6, z\}$.
+		Then the integral $\int_{0}^{z}\frac{1}{\sqrt{1\pi}}e^{-\frac{x^2}{6}}dx = \int_{0}^{z}p_1(x)dx$ is:
+		\begin{equation}
+		\begin{aligned}
+			\int_{0}^{z}p_1(x)dx &= \frac{z}{6}p_1(0) + \frac{2z}{3}p_1\left(\frac{z}{5}\right) + \frac{z}{3}p_1\left(\frac{2z}{5}\right)\\
+				&= \frac{2z}{3}p_1\left(\frac{3z}{5}\right) + \frac{z}{3}p_1\left(\frac{4z}{5}\right) + \frac{z}{6}p_1(z)\\
+				&= P_1(x)
+		\end{aligned}
+		\end{equation}
+		And now we try to estimate the VaR with $\alpha=0.8$.
+		Then we use Regula-Falsi method for the equation $0.5 + P_1(z) - 0.8 = P_1(z)-0.3=0=Q_1(z)$, with $z\in[0,1]$ and $tol\leq10^{-7}$.
+		
+		
+	\section{Naive Fourier Series Approximation}
+	\section{Halley's Comet}
+	\section{Yeast Growth Modelling}
+\end{document}
