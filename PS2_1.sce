@@ -41,11 +41,34 @@ function m = RF1(alpha)
     else
         while 1
             m = (a * Q1(b, alpha) - b * Q1(a, alpha)) / (Q1(b, alpha) - Q1(a, alpha))
-            disp(m)
             if (Q1(m, alpha) < 0.0000001) then
                 return
             else
                 if(Q1(a, alpha) * Q1(m, alpha) > 0) then
+                    a = m
+                else
+                    b = m
+                end
+            end
+        end
+    end
+endfunction
+
+//regula-falsi method for t distribution function
+//value at risk at alpha
+function m = RF2(alpha)
+    a = 0
+    b = 1
+    if(Q2(a, alpha)*Q2(b, alpha) > 0) then
+        disp('error')
+        return
+    else
+        while 1
+            m = (a * Q2(b, alpha) - b * Q2(a, alpha)) / (Q2(b, alpha) - Q2(a, alpha))
+            if (Q2(m, alpha) < 0.0000001) then
+                return
+            else
+                if(Q2(a, alpha) * Q2(m, alpha) > 0) then
                     a = m
                 else
                     b = m
@@ -62,7 +85,26 @@ function myGaussianDriver()
         x = [x val]
         y = [y RF1(val)]
     end
-    plot(x, y)
+    disp('Gaussian:')
+    disp('  alpha  value-at-risk')
+    disp([x' y'])
+    plot(x, y, 'r')
+endfunction
+
+function myTdistDriver()
+    x = []
+    y = []
+    for val=0.8:0.01:0.99
+        x = [x val]
+        y = [y RF2(val)]
+    end
+    disp('T-dist')
+    disp('  alpha  value-at-risk')
+    disp([x' y'])
+    plot(x, y, 'g')
+    hl = legend(['Gaussian','t distribution'])
+    xtitle('Value-at-Risk', 'Level of confidence (alpha)', 'Value-at-Risk (z)')
 endfunction
 
 myGaussianDriver()
+myTdistDriver()
