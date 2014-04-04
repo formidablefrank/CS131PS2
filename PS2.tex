@@ -92,7 +92,7 @@
 			I_2 &= 0.458964\cdot0.444468 + 0.417000\cdot0.55761\\
 				&+ 0.113373\cdot0.461408 + 0.0103992\cdot0.806524\\
 				&+ 0.000261017\cdot6.22113\\
-				&+ 8.98548\times10^{-7}432.589\\
+				&+ 8.98548\times10^{-7}\cdot432.589\\
 			I_2 &= 0.499229 \approx 0.5
 		\end{aligned}$$
 		And now we established equation (3).
@@ -123,12 +123,27 @@
 		\begin{aligned}
 			\int_{0}^{z}p_1(x)dx &= \frac{z}{6}p_1(0) + \frac{2z}{3}p_1\left(\frac{z}{5}\right) + \frac{z}{3}p_1\left(\frac{2z}{5}\right)\\
 				&= \frac{2z}{3}p_1\left(\frac{3z}{5}\right) + \frac{z}{3}p_1\left(\frac{4z}{5}\right) + \frac{z}{6}p_1(z)\\
-				&= P_1(x)
+				&= P_1(z)
 		\end{aligned}
 		\end{equation}
 		And now we try to estimate the VaR with $\alpha=0.8$.
-		Then we use Regula-Falsi method for the equation $0.5 + P_1(z) - 0.8 = P_1(z)-0.3=0=Q_1(z)$, with $z\in[0,1]$ and $tol\leq10^{-7}$.
+		Then we use Regula-Falsi method for the equation $0.5 + P_1(z) - 0.8 = P_1(z)-0.3=0=Q_1(z)$, with $z\in[0,1]$ and $tol=10^{-7}$.
+		The file \texttt{PS2\_1.sce} implements the root-finding method, the root converges to 0.567 192 5.
 		
+		\subsection{VaR estimates using t distribution}
+		The integral $\int_{0}^{z}\frac{1}{\gamma\sqrt{3\pi}}\left(1+\frac{x^2}{3}\right)^{-2} = \int_{0}^{z}p_2(x)dx$ is:
+		\begin{equation}
+		\begin{aligned}
+			\int_{0}^{z}p_2(x)dx &= \frac{z}{6}p_2(0) + \frac{2z}{3}p_2\left(\frac{z}{5}\right) + \frac{z}{3}p_2\left(\frac{2z}{5}\right)\\
+				&= \frac{2z}{3}p_2\left(\frac{3z}{5}\right) + \frac{z}{3}p_2\left(\frac{4z}{5}\right) + \frac{z}{6}p_2(z)\\
+				&= P_2(z)
+		\end{aligned}
+		\end{equation}
+		And now we try to estimate the VaR with $\alpha=0.8$.
+		Then we use Regula-Falsi method for the equation $0.5 + P_2(z) - 0.8 = P_2(z)-0.3=0=Q_2(z)$, with $z\in[0,1]$ and $tol=10^{-7}$.
+		The root converges to 0.358 710 1.
+		We estimate the VaR with $\alpha\in[0.8, 0.99]$ at intervals of 0.1 for the two models.
+		Results are displayed in a tabular and graphical form when the \texttt{PS2\_1.sce} is run.
 		
 	\section{Naive Fourier Series Approximation}
 	\section{Halley's Comet}
