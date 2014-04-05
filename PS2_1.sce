@@ -38,13 +38,13 @@ endfunction
 //value at risk at alpha
 function m = RF1(alpha)
     a = 1
-    b = 200
-    if(Q1(a, alpha)*Q1(b, alpha) >= 0) then
+    b = 40
+    if(Q1(a, alpha)*Q1(b, alpha) > 0) then
         error('redefine bracket')
     else
         while 1
             m = (a * Q1(b, alpha) - b * Q1(a, alpha)) / (Q1(b, alpha) - Q1(a, alpha))
-            if (Q1(m, alpha) < 0.000000001) then
+            if (Q1(m, alpha) < 1D-9) then
                 return
                 disp('nice')
             else
@@ -62,13 +62,13 @@ endfunction
 //value at risk at alpha
 function m = RF2(alpha)
     a = 1
-    b = 20
+    b = 40
     if(Q2(a, alpha)*Q2(b, alpha) > 0) then
         error('redefine bracket')
     else
         while 1
             m = (a * Q2(b, alpha) - b * Q2(a, alpha)) / (Q2(b, alpha) - Q2(a, alpha))
-            if (Q2(m, alpha) < 0.000000001) then
+            if (Q2(m, alpha) < 1D-9) then
                 return
             else
                 if(Q2(a, alpha) * Q2(m, alpha) > 0) then
