@@ -1,3 +1,5 @@
+funcprot(0)
+
 function [F] = f(x)
    F=exp(-abs(x));
    //mprintf("%f\n",F); 
@@ -99,17 +101,46 @@ function[I]=Bi(p,romB,f,i)
     I=(1/p)*romB(p,f,i);
 endfunction
 
-
-for n=1:100
+function[F]=fourier(x,p,n)
     A=0;
     B=0;
-    p=1;
-    x=1;
     for i=1:n
         A=A+(Ai(p,romA,f,i)*cos((i*%pi*x)/p));
         B=B+(Bi(p,romB,f,i)*sin((i*%pi*x)/p));
     end
     O=Ao(p,rom,f)/p;
     F=O+A+B;
-    mprintf("%d %f\n",n,F);
-end
+endfunction
+
+function test()
+    x=[]
+    y=[]
+    for val=-1:0.1:1
+        x=[x val]
+        y=[y fourier(val,1,1)]
+    end
+    plot(x,y,'g')
+endfunction
+
+function fourierplot(n)
+    clf()
+    x=[-1:0.01:1];
+    y=[exp(-abs(x))];
+    plot(x,y,'r');
+    for i=1:n
+        x=[]
+        y=[]
+        for val=-1:0.1:1
+            x=[x val]
+            y=[y fourier(val,1,i)]
+        end
+        plot(x,y,i)
+        hl=legend(['f(x)';'n=i'])
+    end
+    xtitle('Native Fourier Approx','x','y')   
+    
+endfunction
+
+//test()
+fourierplot(10)
+
