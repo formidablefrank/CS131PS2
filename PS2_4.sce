@@ -140,10 +140,10 @@ function myGompertzDriver()
         x_new = x - delta
         if(abs(norm(x_new - x))< 1D-9) then
             disp('optimal parameter <k, C>:')
+            //x_new = real(x_new)
             disp(x_new)
             break
         end
-        disp(x_new)
     end
     s = [0:0.05:20]
     M = [P(1)]
@@ -154,5 +154,5 @@ function myGompertzDriver()
     disp([s' M'])
 endfunction
 
-myLogisticDriver()
-//myGompertzDriver()
+//myLogisticDriver()
+myGompertzDriver()

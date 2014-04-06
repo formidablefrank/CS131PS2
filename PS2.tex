@@ -259,20 +259,25 @@
 	$$
 	Similar to the logistic growth model, the function we want to optimize is (see next page):
 	\begin{landscape}
+	\footnotesize
 	$$\begin{aligned}
 		P_{n+1} &= P_n + \frac{k}{6}P_n\ln(C-P_n) + \frac{2k}{6}\left(P_n + \frac{1}{2}kP_n\ln(C-P_n)\right)\ln\left(C-\left(P_n + \frac{1}{2}kP_n\ln(C-P_n)\right)\right)\\
 				&+ \frac{2k}{6}\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n+\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\\
-				&+ \frac{k}{6}\ln\left(C-P_n-k\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\right)\right)\\
+				&+ \frac{k}{6}\ln\left(C-P_n-k\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\right)\\
 				& \left(P_n+k\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\right)\right)
 	\end{aligned}$$
+	\normalsize
 	\end{landscape}
 	Solving the optimum parameters is also the same as done in the logistic model.
 	The optimum parameters $[k, C]$ converge to $[0.1615294,1.3374996]$.
 	Therefore the optimum logistic model for the given appendix is
-	$$\highlight{\frac{dP}{dt}=0.1615294P\ln(1.3374996-P)}
+	$$\highlight{\frac{dP}{dt}=(0.2824938 + 0.0037822i)P\ln((-2.6785793-6.3601969i)-P)}
 	$$
+	You may wonder why this happened.
+	The Jacobian matrix has complex numbers in it. One reason is that Scilab encounters negative values and computes the natural logarithm of it, resulting to complex numbers.
+	Then the optimum parameters and the numerical solutions are now complex numbers.\\
 	And now, we obtain the general solution of the Gompertz growth model given above with $\Delta t=0.05$.
 	The result is shown in Scilab console.
-	Take note that the numerical solution obtained is again different from the appendix table.
-	
+	Again, take note that the numerical solution obtained is different from the appendix table.\\
+	One may conclude that the Gompertz model is not appropriate to describe the growth of yeast.
 \end{document}
