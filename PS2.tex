@@ -2,6 +2,7 @@
 \usepackage{amsmath}
 \usepackage{xcolor}
 \usepackage[margin=.3in]{geometry}
+\usepackage{pdflscape}
 \newcommand{\highlight}[1]{\colorbox{gray}{$\displaystyle#1$}}
 \newcommand{\head}[1]{\textnormal{\textbf{#1}}}
 \setlength{\columnsep}{.5in}
@@ -136,7 +137,7 @@
 		The file \texttt{PS2\_1.sce} implements the root-finding method, the root converges to 1.567 692 7.
 		
 		\subsection{VaR estimates using t distribution}
-		Using equation (4), the integral $\int_{0}^{z}\frac{1}{\gamma\sqrt{3\pi}}\left(1+\frac{x^2}{3}\right)^{-2} = \int_{0}^{z}p_2(x)dx$ is:
+		Using equation (4), the integral $$\int_{0}^{z}\frac{1}{\gamma\sqrt{3\pi}}\left(1+\frac{x^2}{3}\right)^{-2} = \int_{0}^{z}p_2(x)dx$$ is:
 		$$
 		\begin{aligned}
 			\int_{0}^{z}p_2(x)dx &= \frac{h}{3}p_2(0) + \frac{4h}{3}p_2\left(\frac{z}{5}\right) + \frac{2h}{3}p_2\left(\frac{2z}{5}\right)\\
@@ -189,15 +190,16 @@
 	}
 	\end{equation}
 	where $\mathbf{r}$ is the residual matrix and $\mathbf{J_r}$ is the Jacobian of the residual matrix.
+	The iteration will stop if $\left\|x_new - x_old\right\|_2 \leq tol$.
 	
 	\subsection{Logistic Model}
-	The logistic growth model of the yeast is given by
+	The logistic growth model of yeast is given by
 	$$\frac{dP}{dt} = kP(C-P) = f(t, P)
 	$$
 	where $P$ is the current population. Variables $k$ and $C$ are the parameters of the differential equation.
-	Now, we obtain the solution of this model using RK4 with $\Delta t=1$ using equation (5).
+	Now, we obtain the solution of this model using RK4 with $\Delta t=1$ using equation (5). See next page:
 	
-	\footnotesize
+	\begin{landscape}
 	$$\begin{aligned}
 		x_1 &= kP_n(C-P_n)\\
 		x_2 &= k\left(P_n + \frac{1}{2}kP_n(C-P_n)\right)
@@ -208,14 +210,69 @@
 			& \left(P_n+k\left(C-P_n-\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\right)\right)\\
 		x &= \frac{x_1+2x_2+2x_3+x_4}{6}\\
 	\end{aligned}$$
-	$$\highlight{\begin{aligned}
-		P_{n+1} &= P_n + \frac{k}{6}P_n(C-P_n) + \frac{k}{6}\left(P_n + \frac{1}{2}kP_n(C-P_n)\right)\left(C-\left(P_n + \frac{1}{2}kP_n(C-P_n)\right)\right)\\
-				&+ \frac{k}{6}\left(C-P_n-\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\left(P_n+\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\\
+	$$\begin{aligned}
+		P_{n+1} &= P_n + \frac{k}{6}P_n(C-P_n) + \frac{2k}{6}\left(P_n + \frac{1}{2}kP_n(C-P_n)\right)\left(C-\left(P_n + \frac{1}{2}kP_n(C-P_n)\right)\right)\\
+				&+ \frac{2k}{6}\left(C-P_n-\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\left(P_n+\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\\
 				&+ \frac{k}{6}\left(C-P_n-k\left(C-P_n-\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\right)\right)\\
 				& \left(P_n+k\left(C-P_n-\frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n(C-P_n)\left(P_n+\frac{1}{2}kP_n(C-P_n)\right)\right)\right)\right)\\
-	\end{aligned}}$$
-	\normalsize
-	And this is the function we want to optimize, using different values of $P_n$ and $P_{n+1}$.
-	Next, we form the residual matrix. 
+	\end{aligned}$$
+	\end{landscape}
+	And this is the function we want to optimize, using different values of $P_n$ (independent variable) and $P_{n+1}$ (dependent variable).
+	Take note that the current population is dependent on the previous population.
+	In this case, $P_{n+1}$ is a function of $P_n$ parameterized by $k$ and $C$. We let $P_{n+1} = f_{<k, C>}(P_n)$.
+	Given the appendix data, we form the residual matrix.
+	$$\mathbf{r} = 
+		\begin{bmatrix}
+			f_{<k, C>}(1.03519) - 1.06937\\
+			f_{<k, C>}(1.06937) - 1.12796\\
+			f_{<k, C>}(1.12796) - 1.06937\\
+			\vdots\\
+			f_{<k, C>}(1.32817) - 1.32817\\
+			f_{<k, C>}(1.32817) - 1.33305\\
+			f_{<k, C>}(1.33305) - 1.33305
+		\end{bmatrix}\\
+		\mathbf{J_r} = 
+		\begin{bmatrix}
+			\frac{\partial}{\partial k}f_{<k, C>}(1.03519) & \frac{\partial}{\partial C}f_{<k, C>}(1.03519)\\
+			\frac{\partial}{\partial k}f_{<k, C>}(1.06937) & \frac{\partial}{\partial C}f_{<k, C>}(1.06937)\\
+			\frac{\partial}{\partial k}f_{<k, C>}(1.12796) & \frac{\partial}{\partial C}f_{<k, C>}(1.12796)\\
+			\vdots&\vdots\\
+			\frac{\partial}{\partial k}f_{<k, C>}(1.32817) & \frac{\partial}{\partial C}f_{<k, C>}(1.32817)\\
+			\frac{\partial}{\partial k}f_{<k, C>}(1.32817) & \frac{\partial}{\partial C}f_{<k, C>}(1.32817)\\
+			\frac{\partial}{\partial k}f_{<k, C>}(1.33305) & \frac{\partial}{\partial C}f_{<k, C>}(1.33305)
+		\end{bmatrix}
+	$$
+	To obtain the Jacobian matrix of R, we used the Scilab function \texttt{derivative(fxn, var, order)}.
+	The Scilab script \texttt{PS2\_4.sce} performs the Gauss-Newton optimization with $P_{old} = [1\:1]^T$ and $tol = 1\times10^{-9}$.
+	The optimum parameters $[k, C]$ converge to $[0.1615294,1.3374996]$.
+	Therefore the optimum logistic model for the given appendix is
+	$$\highlight{\frac{dP}{dt}=0.1615294P(1.3374996-P)}
+	$$
+	And now, we obtain the general solution of the logistic growth model given above with $\Delta t=0.05$.
+	The result is shown in Scilab console.
+	Take note that the numerical solution obtained is somewhat different from the appendix table.
+	It is because we used optimal parameters for the logistic model, similar to curve fitting.
+	
+	\subsection{Gompertz Model}
+	The Gompertz growth model of yeast is given by
+	$$\frac{dP}{dt}=kP\ln(C-P)
+	$$
+	Similar to the logistic growth model, the function we want to optimize is (see next page):
+	\begin{landscape}
+	$$\begin{aligned}
+		P_{n+1} &= P_n + \frac{k}{6}P_n\ln(C-P_n) + \frac{2k}{6}\left(P_n + \frac{1}{2}kP_n\ln(C-P_n)\right)\ln\left(C-\left(P_n + \frac{1}{2}kP_n\ln(C-P_n)\right)\right)\\
+				&+ \frac{2k}{6}\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n+\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\\
+				&+ \frac{k}{6}\ln\left(C-P_n-k\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\right)\right)\\
+				& \left(P_n+k\ln\left(C-P_n-\frac{1}{2}k\ln\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\right)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\left(P_n + \frac{1}{2}k\left(C-P_n-\frac{1}{2}kP_n\ln(C-P_n)\left(P_n+\frac{1}{2}kP_n\ln(C-P_n)\right)\right)\right)\right)
+	\end{aligned}$$
+	\end{landscape}
+	Solving the optimum parameters is also the same as done in the logistic model.
+	The optimum parameters $[k, C]$ converge to $[0.1615294,1.3374996]$.
+	Therefore the optimum logistic model for the given appendix is
+	$$\highlight{\frac{dP}{dt}=0.1615294P\ln(1.3374996-P)}
+	$$
+	And now, we obtain the general solution of the Gompertz growth model given above with $\Delta t=0.05$.
+	The result is shown in Scilab console.
+	Take note that the numerical solution obtained is again different from the appendix table.
 	
 \end{document}
