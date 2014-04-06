@@ -10,11 +10,13 @@ function [R]=rom(p,f)
     tol=10^(-6)
     h=p*2;
     R(1,1)=f(h);
+    //mprintf("rom: 1 1 %f\n",R(1,1));
     h=h/2;
     R(1,2)=f(h);
     R(2,2)=(R(1,1) - (4*R(1,2)))/(-3);
     i=2;
     j=2;
+    //mprintf("rom: %d %d %f\n",i,j,R(i,j));
     while (abs(R(i,j)-R(i-1,j-1))>tol)
         h=h/2;
         i=0;
@@ -25,10 +27,10 @@ function [R]=rom(p,f)
             else
                 R(i,j)=(R(i-1,j-1) - ((4^(i-1))*R(i-1,j)))/(1-4^(i-1));
             end
-            //mprintf("%d %d\n",i,j);
         end
+        
     end
-
+    //mprintf("rom: %d %d %f\n",i,j,R(i,j));
     R=R(i,j);
 
 endfunction
@@ -60,7 +62,7 @@ function [R]=romA(p,f,i)
             //mprintf("%d %d\n",i,j);
         end
     end
-
+    //mprintf("romA: %d %d %f\n",i,j,R(i,j));
     R=R(i,j);
 
 endfunction
@@ -92,7 +94,7 @@ function [R]=romB(p,f,i)
             //mprintf("%d %d\n",i,j);
         end
     end
-
+    //mprintf("romB: %d %d %f\n",i,j,R(i,j));
     R=R(i,j);
 
 endfunction

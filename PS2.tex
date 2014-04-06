@@ -3,6 +3,7 @@
 \usepackage{xcolor}
 \usepackage[margin=.3in]{geometry}
 \usepackage{pdflscape}
+\usepackage{graphicx}
 \newcommand{\highlight}[1]{\colorbox{gray}{$\displaystyle#1$}}
 \newcommand{\head}[1]{\textnormal{\textbf{#1}}}
 \setlength{\columnsep}{.5in}
@@ -153,6 +154,35 @@
 		Results are displayed in a tabular and graphical form when the \texttt{PS2\_1.sce} is run.
 		
 	\section{Naive Fourier Series Approximation}
+    	\subsection{Romberg Integration}
+        The periodic function contained three variables with integrals. Given parameters f (function) and p (interval), Romberg's was used for the integral approximation.
+        For this case parameters used were:
+        $f(x) = e^{-\left | x \right |}$ and
+        $p=1$
+        \\
+        Romberg's integration involves using two previous integrations to form the next one. The generalization is as follows:
+        $$R_{ij}=\frac{R_{i-1,j-1} - 4^{i-1}R_{i-1,j}}{1-4^{i-1}}$$
+        \\
+        Stopping condition used: $$\left | R_{i+1,i+1}-R_{i,i} \right | < 10^{-6}$$
+        This is done for $a_{o}$,$a_{i}$,and $b_{i}$. Given the parameters above, the Romberg table for each of the variables are as follows:
+        \begin{table}[h]
+          \begin{tabular}{lllll}
+             & i  & j  & $R_{i,j}$  & Value   \\
+          $a_{0}$ & 22 & 22 & 0.99999 & 0.99999 \\
+          $a_{i}$ & 22 & 22 & 0.99999 & 0.99999 \\
+          $b_{i}$ & 2  & 2  & 0.00000 & 0.00000     
+          \end{tabular}
+        \end{table}
+        
+        \subsection{Fourier Series Approximation}
+        The three approximated integrals were used in the Fourier Series Approximation equation:
+        $$
+        f(x)=\frac{a_{o}}{2}+\sum a_{i}\cos \left ( \frac{i\pi x}{p} \right )+\sum b_{i}\sin \left ( \frac{i\pi x}{p} \right )
+        The x range used was from -1 to 1, with step size 0.1.
+        $$
+        \subsection{Approximation Convergence}
+        To see the convergence Fourier Approx. was done with several n. This case was from 1 to 10. The plot was overlayed with the original $f(x)$ in red.
+        \includegraphics[width=10cm]{plot.png}
 	\section{Halley's Comet}
 	\section{Yeast Growth Modelling}
 	\subsection{Preliminaries}
