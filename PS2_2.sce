@@ -100,16 +100,16 @@ function[I]=Bi(p,romB,f,i)
 endfunction
 
 
-A=0;
-B=0;
-i=1;
-p=1;
-n=5;
-x=1;
-for i=1:n
-    A=A+(Ai(p,romA,f,i)*cos((i*%pi*x)/p));
-    B=B+(Bi(p,romB,f,i)*sin((i*%pi*x)/p));
+for n=1:100
+    A=0;
+    B=0;
+    p=1;
+    x=1;
+    for i=1:n
+        A=A+(Ai(p,romA,f,i)*cos((i*%pi*x)/p));
+        B=B+(Bi(p,romB,f,i)*sin((i*%pi*x)/p));
+    end
+    O=Ao(p,rom,f)/p;
+    F=O+A+B;
+    mprintf("%d %f\n",n,F);
 end
-O=Ao(p,rom,f)/p;
-F=O+A+B;
-
